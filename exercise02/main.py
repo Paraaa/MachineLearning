@@ -20,6 +20,8 @@ def main():
     # test labels with dimension 2x1
     y_test = np.array([[-7], [-63]])
 
+    transformer = Transformer()
+
     polynomialRegression = PolynomialRegression(3)
     polynomialRegression.train(X_train, y_train, False)
     polynomialRegression.predict(np.array([1, 0.3, -2.2]), verbose=True)
