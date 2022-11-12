@@ -53,14 +53,27 @@ class PolynomialRegression:
         if self.parameters is None:
             print("No parameters have been calculated yet.")
             return
-        # FIXME: This line is not calculating things correctly
-        X = np.array([pow(X[p], p) for p in range(self.m)])
-        print(X)
+
+        X = self.__rebuilt_features(X)
 
         product = np.matmul(self.parameters, X)
         # sum the dot product up to get the result
         prediction = round(np.sum(product), 3)
         return prediction
+
+    def __rebuilt_features(self, X: np.array, verbose=False):
+        """Rebuild features vector to it fits to the form of a
+        polynomial regression model of form m.
+
+        Args:
+            X (np.array): features matrix
+            verbose (bool, optional): Show verbose information. Defaults to False.
+        """
+        rebuild_X = []
+        for feature in X:
+            rebuild_X.extend([pow(feature, p) for p in range(self.m)])
+
+        return np.array(rebuild_X)
 
     def __calculate_parameters(self, X: np.array, y: np.array, verbose=False):
         """
@@ -83,6 +96,11 @@ class PolynomialRegression:
             X (numpy_array): vector of features
             y (numpy_array): vector of labels
         """
+        new_X = np.array([self.__rebuilt_features(features) for features in X])
+        print(new_X)
+        X = new_X
+        print(y)
+
         if verbose:
             print("Calculating the parameters of the model ...\n")
         # calculate the transposition of X
